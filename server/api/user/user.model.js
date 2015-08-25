@@ -1,7 +1,6 @@
 'use strict';
 
 var mongoose = require('mongoose');
-var Poll = require('../poll/poll.model');
 var Schema = mongoose.Schema;
 var crypto = require('crypto');
 
@@ -15,7 +14,6 @@ var UserSchema = new Schema({
   hashedPassword: String,
   provider: String,
   salt: String,
-  polls: [{type: Schema.Types.ObjectId, ref: Poll}]
 });
 
 /**

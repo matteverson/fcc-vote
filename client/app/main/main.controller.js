@@ -1,10 +1,11 @@
 'use strict';
 
 angular.module('workspaceApp')
-  .controller('MainCtrl', function ($scope, $http) {
+  .controller('MainCtrl', function ($scope, PollsModel) {
     $scope.polls = [];
 
-    $http.get('/api/polls').success(function(polls) {
-      $scope.polls = polls;
-    });
+    PollsModel.all()
+    .then(function(result) {
+        $scope.polls = result.data;
+    })
   });

@@ -7,6 +7,8 @@ angular.module('workspaceApp', [
   'ngRoute',
   'ui.bootstrap'
 ])
+  .constant('ENDPOINT_URI', '/api/')
+
   .config(function ($routeProvider, $locationProvider, $httpProvider) {
     $routeProvider
       .otherwise({

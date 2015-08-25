@@ -6,5 +6,9 @@ angular.module('workspaceApp')
       .when('/polls', {
         templateUrl: 'app/polls/polls.html',
         controller: 'PollsCtrl'
+      })
+      .when('/polls/:id', {
+        templateUrl: 'app/polls/voting/vote.html',
+        controller: 'VoteCtrl'
       });
   });

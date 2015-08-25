@@ -2,6 +2,7 @@
 
 var _ = require('lodash');
 var Poll = require('./poll.model');
+var User = require('../user/user.model');
 
 // Get list of polls
 exports.index = function(req, res) {
@@ -25,6 +26,40 @@ exports.create = function(req, res) {
   Poll.create(req.body, function(err, poll) {
     if(err) { return handleError(res, err); }
     return res.status(201).json(poll);
+  });
+};
+
+// Adds a vote for a chosen poll option and marks it as "voted on" for the user.
+exports.addVote = function(req, res) {
+  if(req.body._id) { delete req.body._id; }
+  Poll.findById(req.params.id, function (err, poll) {
+    if (err) { return handleError(res, err); }
+    if (!poll) { return res.status(404).send('Not Found'); }
+
+    if (!req.body.user) { return res.status(404).send('User is not logged in'); }
+    var user = User.findById(req.body.user._id, function(err, user) {
+      if (err) { return handleError(res, err); }
+      if (!user) { return res.status(404).send('No such user found'); }
+
+      if (poll.voters && poll.voters.indexOf(req.body.user._id) !== -1) {
+        return res.status(500).send('You already voted on this poll');
+      }
+
+      var vote = req.body.vote;
+      // Find the poll option we're voting on
+      poll.options = poll.options.map(function(option) {
+        if (option.name === req.body.name)
+          option.votes++;
+
+        return option;
+      });
+      poll.voters.push(req.body.user._id);
+
+      poll.save(function (err) {
+        if (err) { return handleError(res, err); }
+        return res.status(200).json(poll);
+      });
+    });
   });
 };
 
