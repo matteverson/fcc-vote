@@ -8,10 +8,13 @@ angular.module('workspaceApp')
     $scope.newPoll = null;
     $scope.editedPoll = null;
     $scope.isEditing = false;
-    $scope.barData = {labels: [], datasets: [{ data: [] }]};
 
     var initCreateForm = function() {
       $scope.newPoll = {name : '', options: [{name: '', votes: 0}], owner: $scope.currentUser};
+    };
+
+    var initBarData = function() {
+      $scope.barData = {labels: [], datasets: [{ data: [] }]};
     };
 
     var getItems = function() {
@@ -27,11 +30,13 @@ angular.module('workspaceApp')
         return {
           labels: labels,
           datasets: [{
-            fillColor: "rgba(220,220,220,0.5)",
-            strokeColor: "rgba(220,220,220,1)",
             data: data
           }]
         };
+    };
+
+    $scope.closeResults = function() {
+      initBarData();
     };
 
     $scope.selectPoll = function(poll) {
@@ -118,5 +123,6 @@ angular.module('workspaceApp')
     };
 
     initCreateForm();
+    initBarData();
     getItems();
   });
