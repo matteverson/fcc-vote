@@ -11,7 +11,7 @@ angular.module('workspaceApp')
     }
 
     function getUrlForId(pollId) {
-      return getUrl() + PollId;
+      return getUrl() + pollId;
     }
 
     service.all = function () {

@@ -5,7 +5,8 @@ angular.module('workspaceApp', [
   'ngResource',
   'ngSanitize',
   'ngRoute',
-  'ui.bootstrap'
+  'ui.bootstrap',
+  'chartjs'
 ])
   .constant('ENDPOINT_URI', '/api/')
 

@@ -1,14 +1,17 @@
 <div ng-include="'components/navbar/navbar.html'"></div>
 <div class="col-xs-12">
+<div class="well">
 <h1>{{poll.name}}</h1>
-<button class="btn btn-danger pull-right" ng-click="deletePoll()">Delete</button>
-<ul class="list-unstyled" ng-repeat="option in poll.options" ng-show="!voted || !loggedin">
-  <li>
-    <div class="radio" ng-click="castVote()">
-      <label class="">{{option.name}} <input type="radio" ng-disabled="voted" ng-model="vote.name" value="{{option.name}}"></input></label>
-    </div>
-  </li>
-</ul>
+  <ul class="list-unstyled" ng-repeat="option in poll.options">
+    <li>
+      <div class="radio" ng-click="castVote()">
+        <label class="">{{option.name}} <input type="radio" ng-disabled="voted || !loggedIn" ng-model="vote.name" value="{{option.name}}"></input></label>
+      </div>
+    </li>
+  </ul>
+</div>
+<h3 id="sign-in-warning" ng-show="!loggedIn">Sign up to cast your vote!</h3>
+<cjs-bar dataset="barData"></cjs-bar>
 <div ng-repeat="option in poll.options" ng-show="voted && loggedin">
   <div>{{option.name}}: {{option.votes}} votes</div>
 </div>

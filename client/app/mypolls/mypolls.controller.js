@@ -1,13 +1,14 @@
 'use strict';
 
 angular.module('workspaceApp')
-  .controller('MypollsCtrl', function ($scope, PollsModel, Auth, $http) {
+  .controller('MypollsCtrl', function ($scope, PollsModel, Auth, $http, $modal, $location) {
     $scope.currentUser = Auth.getCurrentUser();
     $scope.loggedIn = Auth.isLoggedIn();
     $scope.polls = [];
     $scope.newPoll = null;
     $scope.editedPoll = null;
     $scope.isEditing = false;
+    $scope.barData = {labels: [], datasets: [{ data: [] }]};
 
     var initCreateForm = function() {
       $scope.newPoll = {name : '', options: [{name: '', votes: 0}], owner: $scope.currentUser};
@@ -20,16 +21,45 @@ angular.module('workspaceApp')
       })
     };
 
+    function getBarData(poll) {
+        var labels = poll.options.map(function(opt) { return opt.name; });
+        var data = poll.options.map(function(opt) { return opt.votes; });
+        return {
+          labels: labels,
+          datasets: [{
+            fillColor: "rgba(220,220,220,0.5)",
+            strokeColor: "rgba(220,220,220,1)",
+            data: data
+          }]
+        };
+    };
+
+    $scope.selectPoll = function(poll) {
+      $scope.barData = getBarData(poll);
+    };
+
+    $scope.getSharingLink = function(poll) {
+      var pollUrl = $location.protocol() + "://"
+      + location.host
+      + '/polls/'
+      + poll._id;
+      $modal.open( {
+        templateUrl: 'app/mypolls/polllinkmodal.html',
+        controller: 'PollLinkModalCtrl',
+        resolve: {
+          poll: function () {
+            return { name: poll.name, url: pollUrl};
+          }
+        }
+      });
+    };
+
     $scope.isCurrentItem = function(pollId) {
       return $scope.editedItem !== null && $scope.editedItem._id === pollId;
     };
 
-    //$scope.$watch('newPoll', function (poll) {
-    //  $scope.form.$setValidity('count', poll.options && poll.options.length >= 1);
-    //}, true);
-
-    $scope.addPoll = function(form) {
-      if (form.$valid && $scope.loggedIn)
+    $scope.addPoll = function() {
+      if ($scope.loggedIn)
       {
         PollsModel.create($scope.newPoll)
         .then(function(result) {
@@ -39,19 +69,19 @@ angular.module('workspaceApp')
       }
     };
 
-    $scope.updatePoll = function(poll) {
-      PollsModel.update(poll._id, poll)
+    $scope.updatePoll = function() {
+      PollsModel.update($scope.editedPoll._id, $scope.editedPoll)
       .then(function(result) {
-          cancelEditing();
+          $scope.cancelEditing();
           getItems();
       })
     };
 
     $scope.deletePoll = function(poll) {
-      if ($scope.loggedIn && poll.owner === $scope.currentUser) {
+      if ($scope.loggedIn && poll.owner == $scope.currentUser._id) {
         PollsModel.delete(poll._id)
         .then(function(result) {
-          cancelEditing();
+          $scope.cancelEditing();
           getItems();
         });
       }
@@ -78,7 +108,6 @@ angular.module('workspaceApp')
     };
 
     $scope.setEditedPoll = function(poll) {
-      console.log(poll);
       $scope.editedPoll = angular.copy(poll);
       $scope.isEditing = true;
     };
