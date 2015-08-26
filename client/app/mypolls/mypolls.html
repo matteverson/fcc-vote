@@ -22,12 +22,12 @@
 
     <!-- SHOW POLL RESULTS -->
     <div class="panel panel-primary" ng-show="barData.labels.length">
-    <div class="panel-heading">
-      Results
-      <button type="button" class="close" ng-click="closeResults()">&times;</button>
-    </div>
+      <div class="panel-heading">
+        Results
+        <button type="button" class="close" ng-click="closeResults()">&times;</button>
+      </div>
       <div class="panel-body text-center">
-        <cjs-bar ng-show="barData.labels.length" dataset="barData"></cjs-bar>
+        <cjs-bar dataset="barData"></cjs-bar>
       </div>
     </div>
     <div class="panel panel-default">
