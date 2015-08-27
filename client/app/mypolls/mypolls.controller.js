@@ -17,7 +17,7 @@ angular.module('workspaceApp')
     };
 
     var getItems = function() {
-      PollsModel.all()
+      PollsModel.owned(Auth.getCurrentUser()._id)
       .then(function(result) {
         $scope.polls = result.data;
       })

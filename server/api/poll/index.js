@@ -6,6 +6,7 @@ var controller = require('./poll.controller');
 var router = express.Router();
 
 router.get('/', controller.index);
+router.get('/owned/:owner', controller.getOwned);
 router.get('/:id', controller.show);
 router.post('/', controller.create);
 router.put('/:id', controller.update);

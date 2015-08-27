@@ -12,6 +12,16 @@ exports.index = function(req, res) {
   });
 };
 
+// Get list of polls owned by the user ID
+exports.getOwned = function(req, res) {
+  Poll.find()
+  .where('owner').equals(req.params.owner)
+  .exec(function (err, polls) {
+    if(err) { return handleError(res, err); }
+    return res.status(200).json(polls);
+  });
+};
+
 // Get a single poll
 exports.show = function(req, res) {
   Poll.findById(req.params.id, function (err, poll) {
@@ -66,6 +76,7 @@ exports.addVote = function(req, res) {
 // Updates an existing poll in the DB.
 exports.update = function(req, res) {
   if(req.body._id) { delete req.body._id; }
+  console.log(req.body);
   Poll.findById(req.params.id, function (err, poll) {
     if (err) { return handleError(res, err); }
     if(!poll) { return res.status(404).send('Not Found'); }

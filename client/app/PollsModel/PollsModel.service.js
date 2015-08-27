@@ -18,6 +18,10 @@ angular.module('workspaceApp')
       return $http.get(getUrl());
     };
 
+    service.owned = function(userId) {
+      return $http.get(getUrl() + '/owned/' + userId);
+    };
+
     service.create = function(poll) {
       return $http.post(getUrl(), poll);
     };
