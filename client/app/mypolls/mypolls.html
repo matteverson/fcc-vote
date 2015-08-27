@@ -1,29 +1,31 @@
 <div ng-include="'components/navbar/navbar.html'"></div>
 <div class="col-xs-12">
-  <div class="col-md-4 col-sm-6">
+  <div class="col-md-4 col-sm-6 col-xs-12">
     <div class="panel panel-primary">
       <div class="panel-heading">
-        My polls
+        <h3 class="panel-title">My polls</h3>
       </div>
       <div class="panel-body">
         <ul class="list-group">
           <li class="list-group-item" ng-click="selectPoll(poll)" ng-repeat="poll in polls" ng-class="{'active':isCurrentPoll(poll._id)}">
             <div class="row">
-              <span class="col-md-10">{{poll.name}}</span>
-              <span class="col-md-1 glyphicon glyphicon-trash pull-right" ng-click="deletePoll(poll)" data-toggle="tooltip" tooltip="Delete"></span>
+              <div class="col-sm-10 col-xs-10">{{poll.name}}</div>
+              <div class="col-xs-1" ng-click="deletePoll(poll)" data-toggle="tooltip" tooltip="Delete">
+                <span class="glyphicon glyphicon-trash"></span>
+              </div>
             </div>
           </li>
         </ul>
       </div>
     </div>
   </div>
-  <div class="col-md-8 col-lg-8 col-sm-6">
-
+  <div class="col-md-8 col-sm-6 col-xs-12">
     <!-- SHOW POLL RESULTS -->
     <div class="panel panel-primary" ng-show="barData.labels.length">
       <div class="panel-heading">
-        Results for {{selectedPoll.name}}
-        <button type="button" class="close" ng-click="closeResults()">&times;</button>
+        <h3 class="panel-title">{{selectedPoll.name}}
+        <span class="close" ng-click="closeResults()">&times;</span>
+        </h3>
       </div>
       <div class="panel-body text-center">
         <div>
@@ -37,25 +39,27 @@
       <form class="form-horizontal well" ng-hide="selectedPoll" ng-submit="addPoll()" novalidate>
         <fieldset>
           <legend>New poll</legend>
+      <div class="row">
           <div class="form-group">
-            <label class="col-md-2 control-label">Name</label>
-            <div class="col-md-10">
+            <label class="col-xs-2 control-label">Name</label>
+            <div class="col-xs-8">
               <input type="text" class="form-control" ng-model="newPoll.name" placeholder="Poll name" required />
             </div>
           </div>
           <div class="form-group" ng-repeat="option in newPoll.options">
             <ng-form>
-              <label class="col-md-2 control-label">Option {{$index+1}}</label>
-              <div class="col-md-9">
-                <input type="text" class="form-control" ng-model="option.name" placeholder="Description" required />
+              <label class="col-xs-2 control-label">Option {{$index+1}}</label>
+              <div class="col-xs-8">
+                  <input type="text" class="form-control" ng-model="option.name" placeholder="Description" required />
               </div>
-              <button type="button" class="btn" ng-click="removeOption(option)"><span class="glyphicon-trash glyphicon"></span></button>
+                  <button type="button" class="btn" ng-click="removeOption(option)"><span class="glyphicon-trash glyphicon"></span></button>
             </ng-form>
           </div>
           <div class="col-md-10 col-md-offset-2">
             <button type="submit" class="btn btn-primary">Create</button>
             <button type="button" class="btn btn-default" ng-click="addOption()">Add option</button>
           </div>
+    </div>
         </fieldset>
       </form>
     </div>

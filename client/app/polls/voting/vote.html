@@ -1,8 +1,10 @@
 <div ng-include="'components/navbar/navbar.html'"></div>
 <div class="col-xs-12">
-  <div class="panel panel-default" ng-show="!loggedIn || !voted">
+  <div class="panel panel-primary" ng-show="!loggedIn || !voted">
+    <div class="panel-heading">
+      <h3 class="panel-title">{{poll.name}}</h3>
+    </div>
     <div class="panel-body">
-      <h3>{{poll.name}}</h3>
         <div ng-repeat="option in poll.options">
           <div class="form-group" ng-click="castVote()">
             <div class="radio">
@@ -21,9 +23,9 @@
     </div>
 
     <h3 id="sign-in-warning" ng-show="!loggedIn">Sign up to cast your vote!</h3>
-    <div class="panel panel-default" ng-show="loggedIn && voted">
+    <div class="panel panel-primary" ng-show="loggedIn && voted">
       <div class="panel-heading">
-        Results
+        <h3 class="panel-title">{{poll.name}}</h3>
       </div>
       <div class="text-center panel-body">
         <cjs-bar dataset="barData"></cjs-bar>

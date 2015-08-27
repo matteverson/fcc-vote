@@ -12,14 +12,14 @@
   <div class="row">
     <div class="col-lg-12">
       <h3>Recent Polls</h3>
-      <div ng-repeat="poll in polls">
+      <div class="animated-chart-panel" ng-repeat="poll in polls">
         <a href="/polls/{{poll._id}}">
           <div class="col-md-4 col-sm-6 col-xs-12">
-            <div class="panel">
-              <div class="col-xs-12 panel-header">
-                {{poll.name}}
+            <div class="panel panel-primary">
+              <div class="panel-heading">
+                <h3 class="panel-title">{{poll.name}}</h3>
               </div>
-              <div class="text-center">
+              <div class="panel-body text-center">
                 <cjs-bar dataset="poll.barData"></cjs-bar>
               </div>
             </div>

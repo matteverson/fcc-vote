@@ -11,6 +11,8 @@ angular.module('workspaceApp')
         return {
           labels: labels,
           datasets: [{
+            fillColor: "rgba(151,187,205,0.5)",
+            strokeColor: "rgba(151,187,205,1)",
             data: data
           }]
         };

@@ -4,6 +4,7 @@ angular.module('workspaceApp', [
   'ngCookies',
   'ngResource',
   'ngSanitize',
+  'ngAnimate',
   'ngRoute',
   'ui.bootstrap',
   'chartjs'
