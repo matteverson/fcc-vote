@@ -24,12 +24,14 @@ angular.module('workspaceApp')
         };
     };
 
-    $http.get('/api/polls/' + requestedId).success(function(poll) {
-      $scope.poll = poll;
-      $scope.voted = (poll.voters && poll.voters.indexOf(currentUser._id) !== -1);
+    var getPoll = function() {
+      $http.get('/api/polls/' + requestedId).success(function(poll) {
+        $scope.poll = poll;
+        $scope.voted = (poll.voters && poll.voters.indexOf(currentUser._id) !== -1);
 
-      $scope.barData = getBarData(poll);
-    });
+        $scope.barData = getBarData(poll);
+      });
+    };
 
     $scope.castVote = function() {
       if (!Auth.isLoggedIn()) {
@@ -39,10 +41,12 @@ angular.module('workspaceApp')
         .success(function(poll) {
           $scope.voted = true;
           $scope.poll = poll;
+          $scope.barData = getBarData(poll);
         })
         .error(function(data, status) {
           $scope.voted = true;
         });
     };
 
+    getPoll();
   });

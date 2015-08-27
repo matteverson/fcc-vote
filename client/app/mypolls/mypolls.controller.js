@@ -6,8 +6,7 @@ angular.module('workspaceApp')
     $scope.loggedIn = Auth.isLoggedIn();
     $scope.polls = [];
     $scope.newPoll = null;
-    $scope.editedPoll = null;
-    $scope.isEditing = false;
+    $scope.selectedPoll = null;
 
     var initCreateForm = function() {
       $scope.newPoll = {name : '', options: [{name: '', votes: 0}], owner: $scope.currentUser};
@@ -36,11 +35,13 @@ angular.module('workspaceApp')
     };
 
     $scope.closeResults = function() {
+      $scope.selectedPoll = null;
       initBarData();
     };
 
     $scope.selectPoll = function(poll) {
       $scope.barData = getBarData(poll);
+      $scope.selectedPoll = poll;
     };
 
     $scope.getSharingLink = function(poll) {
@@ -59,8 +60,8 @@ angular.module('workspaceApp')
       });
     };
 
-    $scope.isCurrentItem = function(pollId) {
-      return $scope.editedItem !== null && $scope.editedItem._id === pollId;
+    $scope.isCurrentPoll = function(pollId) {
+      return $scope.selectedPoll !== null && $scope.selectedPoll._id === pollId;
     };
 
     $scope.addPoll = function() {
@@ -74,52 +75,22 @@ angular.module('workspaceApp')
       }
     };
 
-    $scope.updatePoll = function() {
-      PollsModel.update($scope.editedPoll._id, $scope.editedPoll)
-      .then(function(result) {
-          $scope.cancelEditing();
-          getItems();
-      })
-    };
-
     $scope.deletePoll = function(poll) {
       if ($scope.loggedIn && poll.owner == $scope.currentUser._id) {
         PollsModel.delete(poll._id)
         .then(function(result) {
-          $scope.cancelEditing();
           getItems();
         });
       }
     };
 
     $scope.addOption = function() {
-      if ($scope.isEditing) {
-        $scope.editedPoll.options.push({name: '', votes: 0});
-      }
-      else {
-        $scope.newPoll.options.push({name: '', votes: 0});
-      }
+      $scope.newPoll.options.push({name: '', votes: 0});
     };
 
     $scope.removeOption = function(item) {
-      if ($scope.isEditing) {
-        var index = $scope.editedPoll.options.indexOf(item);
-        $scope.editedPoll.options.splice(index, 1);
-      }
-      else {
-        var index = $scope.newPoll.options.indexOf(item);
-        $scope.newPoll.options.splice(index, 1);
-      }
-    };
-
-    $scope.setEditedPoll = function(poll) {
-      $scope.editedPoll = angular.copy(poll);
-      $scope.isEditing = true;
-    };
-
-    $scope.cancelEditing = function() {
-      $scope.editedPoll = null;
-      $scope.isEditing = false;
+      var index = $scope.newPoll.options.indexOf(item);
+      $scope.newPoll.options.splice(index, 1);
     };
 
     initCreateForm();

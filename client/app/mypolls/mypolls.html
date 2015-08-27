@@ -7,11 +7,10 @@
       </div>
       <div class="panel-body">
         <ul class="list-group">
-          <li class="list-group-item" ng-repeat="poll in polls" ng-class="{'active':isCurrentPoll(poll._id)}">
+          <li class="list-group-item" ng-click="selectPoll(poll)" ng-repeat="poll in polls" ng-class="{'active':isCurrentPoll(poll._id)}">
             <div class="row">
-              <span class="col-md-10" ng-click="selectPoll(poll)">{{poll.name}}</span>
+              <span class="col-md-10">{{poll.name}}</span>
               <span class="col-md-1 glyphicon glyphicon-trash pull-right" ng-click="deletePoll(poll)" data-toggle="tooltip" tooltip="Delete"></span>
-              <span class="col-md-1 glyphicon glyphicon-pencil pull-right" ng-click="setEditedPoll(poll)" data-toggle="tooltip" tooltip="Edit"></span>
             </div>
           </li>
         </ul>
@@ -23,16 +22,19 @@
     <!-- SHOW POLL RESULTS -->
     <div class="panel panel-primary" ng-show="barData.labels.length">
       <div class="panel-heading">
-        Results
+        Results for {{selectedPoll.name}}
         <button type="button" class="close" ng-click="closeResults()">&times;</button>
       </div>
       <div class="panel-body text-center">
-        <cjs-bar dataset="barData"></cjs-bar>
+        <div>
+          <cjs-bar dataset="barData"></cjs-bar>
+        </div>
+        <a href="#" ng-click="getSharingLink(selectedPoll)" class="text-center">Get link</a>
       </div>
     </div>
     <div class="panel panel-default">
       <!-- CREATE ITEM FORM -->
-      <form class="form-horizontal well" ng-if="!isEditing" ng-submit="addPoll()" novalidate>
+      <form class="form-horizontal well" ng-hide="selectedPoll" ng-submit="addPoll()" novalidate>
         <fieldset>
           <legend>New poll</legend>
           <div class="form-group">
@@ -53,32 +55,6 @@
           <div class="col-md-10 col-md-offset-2">
             <button type="submit" class="btn btn-primary">Create</button>
             <button type="button" class="btn btn-default" ng-click="addOption()">Add option</button>
-          </div>
-        </fieldset>
-      </form>
-      <!-- EDIT ITEM FORM -->
-      <form class="form-horizontal well" ng-if="isEditing" ng-submit="updatePoll()" novalidate>
-        <fieldset>
-          <legend>{{editedPoll.name}}</legend>
-          <div class="form-group">
-            <label class="col-md-2 control-label">Name</label>
-            <div class="col-md-10">
-              <input type="text" class="form-control" ng-model="editedPoll.name" placeholder="Poll name" required />
-            </div>
-          </div>
-          <div class="form-group" ng-repeat="option in editedPoll.options">
-            <ng-form>
-              <label class="col-md-2 control-label">Option {{$index+1}}</label>
-              <div class="col-md-9">
-                <input type="text" class="form-control" ng-model="option.name" placeholder="Description" required />
-              </div>
-              <button type="button" class="btn" ng-click="removeOption(option)"><span class="glyphicon-trash glyphicon"></span></button>
-            </ng-form>
-          </div>
-          <div class="col-md-10 col-md-offset-2">
-            <button type="submit" class="btn btn-primary">Save</button>
-            <button type="button" class="btn btn-default" ng-click="addOption()">Add option</button>
-            <button type="button" class="btn btn-warning pull-right" ng-click="cancelEditing()">Cancel</button>
           </div>
         </fieldset>
       </form>

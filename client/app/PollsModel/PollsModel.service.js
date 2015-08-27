@@ -22,10 +22,6 @@ angular.module('workspaceApp')
       return $http.post(getUrl(), poll);
     };
 
-    service.update = function (pollId, poll) {
-      return $http.put(getUrlForId(pollId), poll);
-    };
-
     service.delete = function(pollId) {
       return $http.delete(getUrlForId(pollId));
     };
