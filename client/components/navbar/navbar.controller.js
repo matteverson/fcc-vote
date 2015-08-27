@@ -5,10 +5,6 @@ angular.module('workspaceApp')
     $scope.menu = [{
       'title': 'Home',
       'link': '/'
-    },
-    {
-      'title': 'Polls',
-      'link': '/polls'
     }];
 
     $scope.isCollapsed = true;
