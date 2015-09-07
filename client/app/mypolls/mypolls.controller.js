@@ -2,14 +2,14 @@
 
 angular.module('workspaceApp')
   .controller('MypollsCtrl', function ($scope, PollsModel, Auth, $http, $modal, $location) {
-    $scope.currentUser = Auth.getCurrentUser();
+    $scope.currentUser = null;
     $scope.loggedIn = Auth.isLoggedIn();
     $scope.polls = [];
     $scope.newPoll = null;
     $scope.selectedPoll = null;
 
     var initCreateForm = function() {
-      $scope.newPoll = {name : '', options: [{name: '', votes: 0}], owner: $scope.currentUser};
+      $scope.newPoll = {name : '', options: [{name: '', votes: 0}], owner: $scope.currentUser._id};
     };
 
     var initBarData = function() {
@@ -17,7 +17,7 @@ angular.module('workspaceApp')
     };
 
     var getItems = function() {
-      PollsModel.owned(Auth.getCurrentUser()._id)
+      PollsModel.owned($scope.currentUser._id)
       .then(function(result) {
         $scope.polls = result.data;
       })
@@ -95,7 +95,12 @@ angular.module('workspaceApp')
       $scope.newPoll.options.splice(index, 1);
     };
 
-    initCreateForm();
+    Auth.isLoggedInAsync(function(result) {
+      $scope.loggedIn = result;
+      $scope.currentUser = Auth.getCurrentUser();
+      getItems();
+      initCreateForm();
+    });
+
     initBarData();
-    getItems();
   });
